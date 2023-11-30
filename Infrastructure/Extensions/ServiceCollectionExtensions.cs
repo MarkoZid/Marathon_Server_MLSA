@@ -176,7 +176,7 @@
                 .AddTransient<OptionRequestsMiddleware>()
                 .AddTransient<TokenManagerMiddleware>();
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        public static IServiceCollection AddSwagger(this IServiceCollection services, Action<object> value)
         {
             return services.AddSwaggerGen(c =>
                         {

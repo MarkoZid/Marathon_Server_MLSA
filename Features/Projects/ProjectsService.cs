@@ -150,7 +150,7 @@
                     ImageUrl = x.ImageUrl,
                     Key = x.Key,
                     IsCreator = x.CreatorId == userId,
-                    Issues = x.Issues.Where(x => x.SprintId == null).Select(x => new IssueListingServiceModel
+                    Issues = x.Issues.Where(x => x.SprintId == null).OrderBy(x => x.BacklogIndex).Select(x => new IssueListingServiceModel
                     {
                         Title = x.Title,
                         Id = x.Id,
@@ -167,7 +167,8 @@
                             FullName = x.Assignee.FullName,
                             ImageUrl = x.Assignee.ImageUrl,
                         },
-                    }).OrderBy(x => x.BacklogIndex),
+                    })
+                    .ToList(),
                     Sprints = x.Sprints.Where(x => !x.Archived).OrderBy(x => x.CreatedOn)
                     .Select(x => new SprintWithIssuesServiceModel
                     {
@@ -196,8 +197,11 @@
                             Description = x.Description,
                             ParentIssueId = x.ParentIssueId,
                             SprintId = x.SprintId,
-                        }).OrderBy(x => x.BacklogIndex),
-                    }).ToList(),
+                        })
+                        .OrderBy(x => x.BacklogIndex)
+                        .ToList(),
+                    })
+                    .ToList(),
                 })
                 .FirstOrDefaultAsync();
 

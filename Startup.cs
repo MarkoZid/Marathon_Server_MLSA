@@ -9,6 +9,7 @@ namespace Marathon.Server
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.OpenApi.Models;
 
     public class Startup
     {
@@ -30,7 +31,10 @@ namespace Marathon.Server
                  .AddRedisEasyCaching()
                  .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                  .AddApplicationServices()
-                 .AddSwagger()
+                 .AddSwaggerGen(c =>
+                 {
+                     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Marathon.Server", Version = "v1" });
+                 })
                  .AddApiControllers();
 
             //services.AddMvc(options =>
@@ -45,6 +49,17 @@ namespace Marathon.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
+                app.UseSwagger();
+
+                // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+                // specifying the Swagger JSON endpoint.
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name V1");
+                    c.RoutePrefix = "swagger";
+                });
             }
 
             app
