@@ -28,13 +28,13 @@ jobs:
 
       - name: dotnet publish
         
-        run: dotnet publish -c Release -o ./myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./Marathon_Server_MLSA/myapp
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'MarathonAPII'
+          app-name: 'mlsademo'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D8F0538F6264F1D84A7DE1C7BCB5CC2 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D8F0538F6264F1D84A7DE1C7BCB5CC2  }}
           package: .
