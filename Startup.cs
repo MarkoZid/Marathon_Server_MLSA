@@ -10,6 +10,7 @@ namespace Marathon.Server
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using Microsoft.Extensions.Caching.StackExchangeRedis;
 
     public class Startup
     {
@@ -29,6 +30,11 @@ namespace Marathon.Server
                  .AddCorsWithOptions()
                  .AddSignalRWithOptions()
                  .AddRedisEasyCaching()
+                 //.AddStackExchangeRedisCache(options =>
+                 //{
+                    // options.Configuration = "redis-caching.redis.cache.windows.net:6380,password=X4KtXQXJs6fVN7mEGDXgcbx3vixX6kW88AzCaOYOx5k=,ssl=True,abortConnect=False";
+                  //   options.InstanceName = "redis-caching";
+                // })
                  .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                  .AddApplicationServices()
                  .AddSwaggerGen(c =>
@@ -36,11 +42,12 @@ namespace Marathon.Server
                      c.SwaggerDoc("v1", new OpenApiInfo { Title = "Marathon.Server", Version = "v1" });
                  })
                  .AddApiControllers();
+                 
 
             //services.AddMvc(options =>
             //{
-             //   options.InputFormatters.Add(new BinaryFormatterInputFormatter());
-              //  options.OutputFormatters.Add(new BinaryFormatterOutputFormatter());
+            //   options.InputFormatters.Add(new BinaryFormatterInputFormatter());
+            //  options.OutputFormatters.Add(new BinaryFormatterOutputFormatter());
             //}); 
         }
 

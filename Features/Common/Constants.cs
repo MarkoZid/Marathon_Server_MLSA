@@ -34,10 +34,13 @@
 
         public static class Redis
         {
-            public const string Connection = "localhost";
-            public const int Port = 6379;
+            public const string Host = "redis-caching.redis.cache.windows.net";
+            public const int Port = 6380;
             public const string Channel = "marathon";
+            public const string Password = "X4KtXQXJs6fVN7mEGDXgcbx3vixX6kW88AzCaOYOx5k=";
         }
+
+        //redis-caching.redis.cache.windows.net:6380,password=X4KtXQXJs6fVN7mEGDXgcbx3vixX6kW88AzCaOYOx5k=,ssl=True,abortConnect=False
 
         public static class HubEvents
         {

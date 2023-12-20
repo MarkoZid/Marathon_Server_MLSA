@@ -27,6 +27,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
 
+
     using static Marathon.Server.Features.Common.Constants;
 
     public static class ServiceCollectionExtensions
@@ -83,10 +84,12 @@
                     .AllowAnyMethod()
                     .AllowCredentials()
                     .SetIsOriginAllowed((host) => true);
-        }));
+            }));
 
             return services;
         }
+
+
 
         public static IServiceCollection AddRedisEasyCaching(this IServiceCollection services)
         {
@@ -95,19 +98,26 @@
                 // use redis cache
                 options.UseRedis(
                     redisConfig =>
-                {
-                    // Setup Endpoint
-                    redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint(Redis.Connection, Redis.Port));
+                    {
+                        // Setup Endpoint
+                        redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint(Redis.Host, Redis.Port));
 
-                    // Setup password if applicable
-                    // if (!string.IsNullOrEmpty(serverPassword))
-                    // {
-                    //    redisConfig.DBConfig.Password = serverPassword;
-                    // }
+                        // Setup password if applicable
+                        // if (!string.IsNullOrEmpty(serverPassword))
+                        // {
+                        //    redisConfig.DBConfig.Password = serverPassword;
+                        // }
 
-                    // Allow admin operations
-                    redisConfig.DBConfig.AllowAdmin = true;
-                },
+                        // Allow admin operations
+                        redisConfig.DBConfig.AllowAdmin = true;
+
+                        redisConfig.DBConfig.AbortOnConnectFail = false;
+
+                        redisConfig.DBConfig.IsSsl = true;
+
+                        redisConfig.DBConfig.Password = Redis.Password;
+
+                    },
                     Redis.Channel);
             });
 
