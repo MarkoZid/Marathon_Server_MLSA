@@ -1,9 +1,7 @@
 {
   "dependencies": {
-    "apis1": {
-      "type": "apis"
-    },
     "redis1": {
+      "ignored": "true",
       "type": "redis",
       "connectionId": "CacheConnection"
     }

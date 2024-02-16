@@ -41,12 +41,33 @@
             return applicationSettingsConfiguration.Get<AppSettings>();
         }
 
+        //public static IServiceCollection AddDatabase(
+          //  this IServiceCollection services,
+            //IConfiguration configuration)
+            //=> services
+              //  .AddDbContext<MarathonDbContext>(options => options
+                //    .UseSqlServer(configuration.GetDefaultConnectionStringAsync()));
+
         public static IServiceCollection AddDatabase(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services
-                .AddDbContext<MarathonDbContext>(options => options
-                    .UseSqlServer(configuration.GetDefaultConnectionString()));
+    this IServiceCollection services,
+    IConfiguration configuration)
+        {
+            var connectionString = configuration.GetDefaultConnectionStringAsync().GetAwaiter().GetResult();
+
+            return services.AddDbContext<MarathonDbContext>(options =>
+                options.UseSqlServer(connectionString));
+        }
+
+
+        public static IServiceCollection AddZidDb(this IServiceCollection services, string connectionString)
+        {
+            services.AddDbContext<MarathonDbContext>(options =>
+            options.UseSqlServer(connectionString));
+
+            return services;
+        }
+
+
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {

@@ -11,6 +11,10 @@ namespace Marathon.Server
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
     using Microsoft.Extensions.Caching.StackExchangeRedis;
+    using System.IO;
+    using System.Xml;
+    using Newtonsoft.Json;
+    using Marathon.Server.Azure;
 
     public class Startup
     {
@@ -23,8 +27,24 @@ namespace Marathon.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            string dbConnectionString = Configuration.GetConnectionString("ConnectionString");
+            string redisConnectionString = Configuration.GetConnectionString("Redis");
+
             Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
+            KeyVaultManager keyVaultManager = new KeyVaultManager();
+
+            // Debug.WriteLine(keyVaultManager.GetSecret("Databaza"));
+
+            var gpt = keyVaultManager.GetSecret("Databaza");
+
+            
+
             services
+
+                
+                 //.AddZidDb(dbConnectionString)
                  .AddDatabase(this.Configuration)
                  .AddIdentity()
                  .AddCorsWithOptions()
@@ -50,6 +70,9 @@ namespace Marathon.Server
             //  options.OutputFormatters.Add(new BinaryFormatterOutputFormatter());
             //}); 
         }
+
+
+        
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
